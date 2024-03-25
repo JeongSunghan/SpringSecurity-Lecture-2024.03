@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+
 import com.example.springSecurity.entity.SecurityUser;
 import com.example.springSecurity.service.SecurityUserService;
 import com.example.springSecurity.util.ImageUtil;
@@ -39,8 +40,27 @@ public class SecurityUserController {
 			HttpSession session, Model model){
 		List<SecurityUser> securityUserList = securityService.getSecurityUserList(page);
 		
+		// 전체 게시물 수를 가져오기 위해 게시물 서비스의 getBoardCount 메서드 호출
+				int totalUserCount = securityService.getSecurityUserCount();
+				// 전체 페이지 수 계산 (한 페이지당 게시물 수를 나눈 뒤 올림 처리)
+				int totalPages = (int) Math.ceil(totalUserCount / (double) securityService.COUNT_PER_PAGE);
+				// 시작 페이지 계산
+				int startPage = (int) Math.ceil((page - 0.5) / securityService.PAGE_PER_SCREEN - 1) * securityService.PAGE_PER_SCREEN
+						+ 1;
+				// 종료 페이지 계산 (총 페이지 수와 시작 페이지를 기준으로 계산)
+				int endPage = Math.min(totalPages, startPage + securityService.PAGE_PER_SCREEN - 1);
+				// 페이지 번호 목록 생성을 위한 리스트
+				List<Integer> pageList = new ArrayList<>();
+				// 시작 페이지부터 종료 페이지까지 반복하면서 페이지 목록에 추가
+				for (int i = startPage; i <= endPage; i++)
+					pageList.add(i);
+		
 		model.addAttribute("SecurityUserList", securityUserList);		
-		return "user/list";
+		model.addAttribute("totalPages", totalPages);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
+		model.addAttribute("pageList", pageList);
+		return "user/list2";
 	}
 
 	@GetMapping("/login")

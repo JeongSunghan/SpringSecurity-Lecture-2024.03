@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <header th:replace="~{fragments/base :: head}"></header>
+    <style>
+        td,
+        th {
+            text-align: center;
+        }
+    </style>
+    <script th:inline="javascript">
+        function search() {
+            const field = $('#field').val();
+            const query = $('#query').val();
+            const uri = '/ss/board/list?p=' + [[${ session.currentBoardPage }]] + '&f=' + field + '&q=' + query;
+            location.href = encodeURI(uri);
+        }
+    </script>
+</head>
+
+<body>
+    <div th:insert="~{fragments/base :: top}"></div>
+
+    <div class="container" style="margin-top:80px">
+        <div class="row">
+            <div class="col-3">
+                <aside th:replace="~{fragments/base :: aside}"></aside>
+            </div>
+
+            <div class="col-9">
+                <main id="main">
+                    <table class="table table-sm table-borderless">
+                        <tr>
+                            <td style="width: 72%; text-align: left; font-size: small;" >
+                                <h3><strong class="me-5">유저 목록</strong>
+                                    <table border="1" style="font-size: small;">
+                                        <tr>
+                                            <th>UID</th>
+                                            <!-- <th>비밀번호</th> -->
+                                            <th>나이</th>
+                                            <th>이메일</th>
+                                            <th>regDate</th>
+                                            <th>삭제여부</th>
+                                            <!-- <th>사진</th> -->
+                                            <th>provider</th>
+                                            <th>role</th>
+                                        </tr>
+                                        <tr th:each="SecurityUser, stat : ${SecurityUserList}">
+                                            <td th:text="${SecurityUser.uid}" </td>
+                                            <!-- <td th:text="${SecurityUser.pwd}" </td> -->
+                                            <td th:text="${SecurityUser.uname}"></td>
+                                            <td th:text="${SecurityUser.email}" </td>
+                                            <td th:text="${SecurityUser.regDate}" </td>
+                                            <td th:text="${SecurityUser.isDeleted}" </td>
+                                            <!-- <td th:text="${SecurityUser.picture}" </td> -->
+                                            <td th:text="${SecurityUser.provider}" </td>
+                                            <td th:text="${SecurityUser.role}" </td>
+                                        </tr>
+
+                                </h3>
+                            </td>
+
+
+                        </tr>
+                    </table>
+                    <hr>
+
+
+                    <!-- pagination -->
+                    <ul class="pagination justify-content-center mt-4">
+                        <span th:if="${session.currentBoardPage gt 10}">
+                            <li class="page-item"><a class="page-link"
+                                    th:href="@{/board/list(p=${startPage-1},f=${field},q=${query})}"><i
+                                        class="fa-solid fa-less-than"></i></a></li>
+                        </span>
+                        <span th:if="${session.currentBoardPage le 10}">
+                            <li class="page-item"><a class="page-link" href="#"><i
+                                        class="fa-solid fa-less-than"></i></a></li>
+                        </span>
+                        <span th:each="page: ${pageList}">
+                            <!-- <li class="page-item" th:classappend="${session.currentBoardPage eq page ? 'active' : ''}">
+								<span th:if="${session.currentBoardPage eq page}">
+									<a class="page-link" href="#">[[${page}]]</a>
+								</span>
+								<span th:if="${session.currentBoardPage ne page}">
+									<a class="page-link" th:href="@{/board/list(p=${page},f=${field},q=${query})}">[[${page}]]</a>
+								</span>
+							</li> -->
+                            <span th:switch="${page}">
+                                <th:block th:case="${session.currentBoardPage}">
+                                    <li class="page-item active">
+                                        <a class="page-link" href="#">[[${page}]]</a>
+                                    </li>
+                                </th:block>
+                                <th:block th:case="*">
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                            th:href="@{/board/list(p=${page},f=${field},q=${query})}">[[${page}]]</a>
+                                    </li>
+                                </th:block>
+                            </span>
+                        </span>
+                        <span th:if="${totalPages gt endPage}">
+                            <li class="page-item"><a class="page-link"
+                                    th:href="@{/board/list(p=${endPage+1},f=${field},q=${query})}"><i
+                                        class="fa-solid fa-greater-than"></i></a></li>
+                        </span>
+                        <span th:if="${totalPages eq endPage}">
+                            <li class="page-item"><a class="page-link" href="#"><i
+                                        class="fa-solid fa-greater-than"></i></a></li>
+                        </span>
+                    </ul>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="~{fragments/base :: bottom}"></footer>
+</body>
+
+</html>
