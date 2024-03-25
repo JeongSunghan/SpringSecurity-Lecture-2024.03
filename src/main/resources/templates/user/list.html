@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        th, td{padding: 3px;}
+    </style>
+</head>
+<body style="margin: 50px;">
+    <h1>유저 리스트</h1>
+    <hr>
+    <table border="1">
+        <tr>
+            <th>UID</th><th>비밀번호</th><th>나이</th><th>이메일</th><th>regDate</th><th>삭제여부</th>
+			<th>사진</th><th>provider</th><th>role</th>
+        </tr>
+        <tr th:each="SecurityUser, stat : ${SecurityUserList}">
+            <td th:text="${SecurityUser.uid}"</td>        
+            <td th:text="${SecurityUser.pwd}"</td>        
+			<td th:text="${SecurityUser.uname}" ></td>            
+			<td th:text="${SecurityUser.email}"</td>
+            <td th:text="${SecurityUser.regDate}"</td>           
+            <td th:text="${SecurityUser.isDeleted}"</td>           
+            <td th:text="${SecurityUser.picture}"</td>           
+            <td th:text="${SecurityUser.provider}"</td>           
+            <td th:text="${SecurityUser.role}"</td>           
+        </tr>
+    </table>
+</body>
+</html>

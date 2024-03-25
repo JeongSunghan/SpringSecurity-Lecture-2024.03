@@ -25,7 +25,7 @@ public class SecurityConfig {
 					.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
 					
 					//지정된 경로는 인증 없이 누구는 접근허용
-					.requestMatchers("user/register",
+					.requestMatchers("user/register", "user/list",
 							"/img/**", "/css/**", "/js/**", "/error/**").permitAll()
 					
 					//어드민 권한을 갖고 있는 사람만 들어갈 수 있다. (열쇠 혹은 허가증이라 생각하기)

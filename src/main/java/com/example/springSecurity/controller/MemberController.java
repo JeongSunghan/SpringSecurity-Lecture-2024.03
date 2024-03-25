@@ -7,15 +7,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.springSecurity.entity.Member;
+import com.example.springSecurity.service.SecurityUserService;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j		//log 를 선언하지 않고 사용가능
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/member")
 public class MemberController {
+	private final SecurityUserService securityService;
 	//서버 접속 => filter 에 들어가서 자동으로 로그인창이 나옴 => 마음대로 액세스 불가
-	
 	@ResponseBody
 	@GetMapping("/detail/{mid}")
 	public String detail(@PathVariable int mid) {

@@ -1,6 +1,8 @@
 package com.example.springSecurity.controller;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -11,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -19,6 +22,7 @@ import com.example.springSecurity.entity.SecurityUser;
 import com.example.springSecurity.service.SecurityUserService;
 import com.example.springSecurity.util.ImageUtil;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -29,6 +33,15 @@ public class SecurityUserController {
 	private final BCryptPasswordEncoder bCryptEncoder;
 	private final ImageUtil imageUtil;
 	@Value("${spring.servlet.multipart.location}") private String uploadDir;
+	
+	@GetMapping("/list")
+	public String list(@RequestParam(name = "p", defaultValue = "1") int page,
+			HttpSession session, Model model){
+		List<SecurityUser> securityUserList = securityService.getSecurityUserList(page);
+		
+		model.addAttribute("SecurityUserList", securityUserList);		
+		return "user/list";
+	}
 
 	@GetMapping("/login")
 	public String login() {
@@ -87,5 +100,4 @@ public class SecurityUserController {
 		
 		return "loginSuccess - " + uid;
 	}
-	
 }
