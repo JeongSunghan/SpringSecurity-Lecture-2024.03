@@ -1,32 +1,89 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        th, td{padding: 3px;}
-    </style>
+	<header th:replace="~{common/base :: head}"></header>
+	<script>
+		function uidClick(uid) {
+			$.ajax({
+				type: 'GET',
+				url: '/ss/user/detail/' + uid,
+				success: function(jsonUser) {
+					let user = JSON.parse(jsonUser);
+					$('#imgSrc').attr({src: user.picture});
+					$('#suid').val(user.suid);
+					$('#uid').val(user.uid);
+					$('#hashedPwd').val(user.pwd);
+					$('#uname').val(user.uname);
+					$('#email').val(user.email);
+					$('#provider').val(user.provider);
+					$('#role').val(user.role);
+					$('#picture').val(user.picture);
+					$('#detailModal').modal('show');
+				}
+			});
+		}
+		function deleteUser() {
+			let uid = $('#uid').val();
+			const answer = confirm('정말로 삭제하시겠습니까?');
+			if (answer)
+				location.href = '/ss/user/delete/' + uid;
+		}
+	</script>
 </head>
-<body style="margin: 50px;">
-    <h1>유저 리스트</h1>
-    <hr>
-    <table border="1">
-        <tr>
-            <th>UID</th><th>비밀번호</th><th>나이</th><th>이메일</th><th>regDate</th><th>삭제여부</th>
-			<th>사진</th><th>provider</th><th>role</th>
-        </tr>
-        <tr th:each="SecurityUser, stat : ${SecurityUserList}">
-            <td th:text="${SecurityUser.uid}"</td>        
-            <td th:text="${SecurityUser.pwd}"</td>        
-			<td th:text="${SecurityUser.uname}" ></td>            
-			<td th:text="${SecurityUser.email}"</td>
-            <td th:text="${SecurityUser.regDate}"</td>           
-            <td th:text="${SecurityUser.isDeleted}"</td>           
-            <td th:text="${SecurityUser.picture}"</td>           
-            <td th:text="${SecurityUser.provider}"</td>           
-            <td th:text="${SecurityUser.role}"</td>           
-        </tr>
-    </table>
+<body>
+	<div th:insert="~{common/base :: top}"></div>
+
+	<div class="container" style="margin-top:80px">
+		<div class="row">
+			<div class="col-3">
+				<aside th:replace="~{common/base :: aside}"></aside>
+			</div>
+
+			<div class="col-9">
+				<main id="main">
+					<h3><strong>사용자 목록</strong></h3>
+					<hr>
+					<table class="table">
+						<tr>
+							<th style="text-align: center;">프로필</th><th>UID</th><th>이름</th><th>Provider</th>
+							<th>이메일</th><th>등록일</th><th>역할</th>
+						</tr>
+						<tr th:each="user: ${userList}">
+							<td style="text-align: center;"><img th:src="${user.picture}" class="rounded-circle" height="28"></td>
+							<td>
+								<a href="#" th:onclick="uidClick([[${user.uid}]])">
+									<span th:text="${#strings.length(user.uid) > 11 ? #strings.substring(user.uid, 0, 10) + '...' : user.uid}"></span>
+								</a>
+							</td>
+							<td th:text="${user.uname}"></td>
+							<td th:text="${user.provider}"></td>
+							<td th:text="${user.email}"></td>
+							<td th:text="${user.regDate}"></td>
+							<td th:text="${user.role}"></td>
+						</tr>
+					</table>
+					<ul class="pagination justify-content-center mt-4">
+						<li class="page-item"><a class="page-link" href="#"><i class="fa-solid fa-less-than"></i></a></li>
+						<span th:each="page: ${pageList}">
+							<span th:if="${session.currentUserPage == page}">
+								<li class="page-item active">
+									<a class="page-link" href="#">[[${page}]]</a>
+								</li>
+							</span>
+							<span th:if="${session.currentUserPage != page}">
+								<li class="page-item">
+									<a class="page-link" th:href="@{/user/list/{x}(x=${page})}">[[${page}]]</a>
+								</li>
+							</span>
+						</span>
+						<li class="page-item"><a class="page-link" href="#"><i class="fa-solid fa-greater-than"></i></a></li>
+					</ul> 
+				</main>
+			</div>
+		</div>
+	</div>
+
+	<footer th:replace="~{common/base :: bottom}"></footer>
+	<div th:insert="~{user/user_modal :: modal}"></div>
 </body>
 </html>

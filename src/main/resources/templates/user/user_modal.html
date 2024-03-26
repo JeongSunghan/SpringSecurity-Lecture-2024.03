@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div th:fragment="modal">
+
+    <!-- detailModal -->
+    <div class="modal" id="detailModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">사용자 조회/수정/삭제</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+        
+          <div class="modal-body">
+            <form action="/ss/user/update" method="post" enctype="multipart/form-data">
+              <input type="hidden" name="suid" id="suid">
+              <input type="hidden" name="hashedPwd" id="hashedPwd">
+              <input type="hidden" name="profile" id="profile">
+              <table class="table table-borderless">
+                <tr>
+                  <td style="width: 30%; text-align: center;"><label class="col-form-label">사용자 ID</label></td>
+                  <td style="width: 35%;"><input type="text" name="uid" id="uid" class="form-control"></td>
+                  <td style="width: 35%;" rowspan="2"><img id="imgSrc" width="100%"></td>
+                </tr>
+                <tr>
+                  <td style="text-align: center;"><label class="col-form-label">사용자 이름</label></td>
+                  <td><input type="text" name="uname" id="uname" class="form-control"></td>
+                </tr>
+                <tr>
+                  <td style="text-align: center;"><label class="col-form-label">패스워드</label></td>
+                  <td><input type="password" name="pwd" class="form-control" placeholder="패스워드"></td>
+                  <td><input type="password" name="pwd2" class="form-control" placeholder="패스워드 확인"></td>
+                </tr>
+                <tr>
+                  <td style="text-align: center;"><label class="col-form-label">공급자/역할</label></td>
+                  <td><input type="text" name="provider" class="form-control" id="provider"></td>
+                  <td><input type="text" name="role" class="form-control" id="role"></td>
+                </tr>
+                <tr>
+                  <td style="text-align: center;"><label class="col-form-label">이메일</label></td>
+                  <td colspan="2"><input type="text" name="email" id="email" class="form-control"></td>
+                </tr>
+								<tr>
+                  <td style="text-align: center;"><label class="col-form-label">프로파일</label></td>
+                  <td colspan="2"><input type="file" name="newProfile" class="form-control"></td>
+                </tr>
+								<tr>
+                  <td style="text-align: center;"><label class="col-form-label">깃허브</label></td>
+                  <td colspan="2"><input type="text" name="github" id="github" class="form-control"></td>
+                </tr>
+								<tr>
+                  <td style="text-align: center;"><label class="col-form-label">인스타그램</label></td>
+                  <td colspan="2"><input type="text" name="insta" id="insta" class="form-control"></td>
+                </tr>
+								<tr>
+                  <td style="text-align: center;"><label class="col-form-label">지역</label></td>
+                  <td colspan="2"><input type="text" name="location" id="location" class="form-control"></td>
+                </tr>
+                <tr>
+                  <td colspan="3" style="text-align: right;">
+                    <button class="btn btn-primary me-1" type="submit">수정</button>
+                    <button class="btn btn-danger me-1" type="button" data-bs-dismiss="modal" onclick="deleteUser()">삭제</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">종료</button>
+                  </td>
+                </tr>
+              </table>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
