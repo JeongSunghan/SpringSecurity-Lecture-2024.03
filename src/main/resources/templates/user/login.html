@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<header th:replace="~{fragments/base :: head}"></header>
+	<header th:replace="~{common/base :: head}"></header>
 	<style>
 		td { text-align: center; }
 	</style>
@@ -49,10 +49,10 @@
             <div class="mt-3 mb-3">
               <span class="me-3">소셜 계정으로 로그인</span>
               <span>
-                <a href="#"><img src="/ss/img/google-logo.png" height="32"></a>
-                <a href="#"><img src="/ss/img/github-logo.png" height="32"></a>
-                <a href="#"><img src="/ss/img/naver-logo.jpg" height="32"></a>
-                <a href="#"><img src="/ss/img/kakao-logo.png" height="32"></a>
+                <a href="/ss/oauth2/authorization/google"><img src="/ss/img/google-logo.png" height="32"></a>
+                <a href="/ss/oauth2/authorization/github"><img src="/ss/img/github-logo.png" height="32"></a>
+                <a href="/ss/oauth2/authorization/naver"><img src="/ss/img/naver-logo.jpg" height="32"></a>
+                <a href="/ss/oauth2/authorization/kakao"><img src="/ss/img/kakao-logo.png" height="32"></a>
               </span>
             </div>
           </div>
@@ -62,6 +62,6 @@
     </div>
   </div>
 
-	<footer th:replace="~{fragments/base :: bottom}"></footer>
+	<footer th:replace="~{common/base :: bottom}"></footer>
 </body>
 </html>

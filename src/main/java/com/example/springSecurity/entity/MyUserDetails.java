@@ -2,9 +2,11 @@ package com.example.springSecurity.entity;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -12,9 +14,25 @@ import lombok.RequiredArgsConstructor;
 // 로컬 로그인 implements -> UserDetails 구현
 // 소셜 로그인 implements -> OAuth2User 구현
 
-@RequiredArgsConstructor
-public class MyUserDetails implements UserDetails{
-	private final SecurityUser securityUser;
+public class MyUserDetails implements UserDetails, OAuth2User{
+	private SecurityUser securityUser;		//로컬일때는 괜찮지만, 소셜일때는 final 사용이 안됨
+	private Map<String, Object> attributes;
+	
+	
+	//생성자
+	public MyUserDetails() {}
+	
+	//로컬 로그인 - 스프링이 생성자 방식으로 의존성 주입
+	public MyUserDetails(SecurityUser securityUser) {
+		this.securityUser = securityUser;
+	}
+	
+	//소셜 로그인 - 로컬과 동일함
+	public MyUserDetails(SecurityUser securityUser, Map<String, Object> attributes) {
+		this.securityUser = securityUser;
+		this.attributes = attributes;
+	}
+	
 
 	//사용자의 권한을 저장할 컬렉션 (관리자 혹은 사용자냐?)
 	@Override
@@ -62,6 +80,20 @@ public class MyUserDetails implements UserDetails{
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	@Override
+	public Map<String, Object> getAttributes() {		
+		return attributes;
+	}
+
+	@Override
+	public String getName() {
+		return null;
+	}
+	
+	public SecurityUser getSecurityUser() {
+		return securityUser;
 	}
 
 }

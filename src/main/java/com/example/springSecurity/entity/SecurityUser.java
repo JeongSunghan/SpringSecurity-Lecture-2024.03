@@ -17,7 +17,7 @@ import lombok.ToString;
 @ToString
 
 public class SecurityUser {
-	private String uid;
+	private String uid;				//provider를 붙이고_id(숫자) = uid
 	private String pwd;
 	private String uname;
 	private String email;

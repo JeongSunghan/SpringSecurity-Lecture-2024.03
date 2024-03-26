@@ -1,16 +1,20 @@
 package com.example.springSecurity.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.example.springSecurity.service.MyOAuth2UserService;
+
 import jakarta.servlet.DispatcherType;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+	@Autowired private MyOAuth2UserService myOAuth2UserService;
 	//글에 선을 그어져있으면, 람다함수 사용
 	
 	@Bean
@@ -43,6 +47,19 @@ public class SecurityConfig {
 																//사용자가 로그인에 성공했을 때 지정된 URL로 리다이렉션
 				.permitAll()				
 			)
+			
+			//소셜 로그인
+			.oauth2Login(auth -> auth				
+				.loginPage("/user/login")
+				//소셜 로그인이 완료된 이후의 후처리
+				// 1. 코드받기(인증), 2. 액세스 토큰(권한), 3. 사용자 프로필 정보 가져오기
+				// 4. 3에서 받은 정보를 토대로 DB에 없으면 가입
+				// 5. 프로바이더가 제공하는 정보 + 추가정보 수집 (주소, ...)
+				.userInfoEndpoint(user -> user.userService(myOAuth2UserService))
+				.defaultSuccessUrl("/user/loginSuccess", true)
+			)
+			
+			
 			.logout(auth -> auth
 				.logoutUrl("/user/logout")
 				.invalidateHttpSession(true)		// 로그아웃시 세션을 초기화

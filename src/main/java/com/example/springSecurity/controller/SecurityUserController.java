@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -27,6 +28,7 @@ import com.example.springSecurity.util.ImageUtil;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONObject;
 
 @Slf4j
 @Controller
@@ -137,6 +139,23 @@ public class SecurityUserController {
 		model.addAttribute("pageList", pageList);
 		model.addAttribute("menu", menu);
 		return "user/list";
+	}
+	
+	@ResponseBody
+	@GetMapping("/detail/{uid}")
+	public String detail(@PathVariable String uid) {
+		SecurityUser securityUser = securityService.getUserByUid(uid);
+		JSONObject jUser = new JSONObject();
+		jUser.put("uid", uid);
+		jUser.put("uid2", uid);
+		jUser.put("hashedPwd", securityUser.getPwd());
+		jUser.put("uname", securityUser.getUname());
+		jUser.put("email", securityUser.getEmail());
+		jUser.put("provider", securityUser.getProvider());
+		jUser.put("role", securityUser.getRole());
+		jUser.put("picture", securityUser.getPicture());
+		return jUser.toString();
+		
 	}
 	
 }
